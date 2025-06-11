@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom" th:fragment="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-plane-departure me-2"></i>FlightBooker
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" style="color: white;"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${currentUrl == '/' ? 'active' : ''}" href="/">
+                        <i class="fas fa-home me-1"></i>Inicio
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${currentUrl == '/vuelos/buscar' ? 'active' : ''}" href="/">
+                        <i class="fas fa-search me-1"></i>Buscar Vuelos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:classappend="${currentUrl == '/reservas/misReservas' ? 'active' : ''}"
+                       th:href="@{/reservas/misReservas}">
+                        <i class="fas fa-ticket-alt me-1"></i>Mis Reservas
+                    </a>
+                </li>
+               
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

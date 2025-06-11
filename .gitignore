@@ -1,0 +1,11 @@
+# Ignorar la configuración de IntelliJ
+.idea/
+*.iml
+
+# Carpetas de compilación
+out/
+target/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db

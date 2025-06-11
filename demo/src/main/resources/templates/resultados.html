@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base_layout}">
+<head>
+  <title layout:title-pattern="$CONTENT_TITLE"></title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <div class="container py-5">
+    <h1 class="text-center mb-5 fw-bold">Resultados de Búsqueda de Vuelos</h1>
+
+    <!-- Mostrar mensajes de error o éxito -->
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      <span th:text="${error}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="fas fa-check-circle me-2"></i>
+      <span th:text="${success}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${#lists.isEmpty(vuelos)}" class="alert alert-info text-center" role="alert">
+      <i class="fas fa-info-circle me-2"></i>
+      No se encontraron vuelos para tu búsqueda.
+    </div>
+
+    <div th:unless="${#lists.isEmpty(vuelos)}" class="table-responsive">
+      <table class="table table-hover table-striped table-bordered align-middle">
+        <thead class="table-dark">
+        <tr>
+          <th>Aerolínea</th>
+          <th>Origen</th>
+          <th>Destino</th>
+          <th>Fecha</th>
+          <th>Precio</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="vuelo : ${vuelos}"
+            th:class="${vuelosReservados != null and vuelosReservados[vuelo.id]} ? 'vuelo-reservado' : ''">
+          <td th:text="${vuelo.aerolinea.nombreAerolinea}"></td>
+          <td th:text="${vuelo.origen.ciudad.nombre}"></td>
+          <td th:text="${vuelo.destino.ciudad.nombre}"></td>
+          <td th:text="${#dates.format(vuelo.fecha.fecha, 'dd/MM/yyyy')}"></td>
+          <td>
+            <span th:if="${#lists.isEmpty(vuelo.tarifas)}">N/A</span>
+            <span th:unless="${#lists.isEmpty(vuelo.tarifas)}" th:text="${'$' + #numbers.formatDecimal(vuelo.tarifas.get(0).precioTarifa, 0, 'COMMA', 2, 'POINT')}"></span>
+          </td>
+          <td>
+            <!-- Estado de la reserva -->
+            <span th:if="${vuelosReservados != null and vuelosReservados[vuelo.id]}"
+                  class="badge-reservado">
+              <i class="fas fa-lock me-1"></i>RESERVADO
+            </span>
+            <span th:unless="${vuelosReservados != null and vuelosReservados[vuelo.id]}"
+                  class="badge bg-success">
+              <i class="fas fa-check me-1"></i>DISPONIBLE
+            </span>
+          </td>
+          <td>
+            <!-- Botón condicional según el estado de reserva -->
+            <div th:if="${vuelosReservados != null and vuelosReservados[vuelo.id]}">
+              <button type="button" class="btn btn-reservado btn-sm" disabled>
+                <i class="fas fa-ban me-1"></i>Ya Reservado
+              </button>
+            </div>
+            <div th:unless="${vuelosReservados != null and vuelosReservados[vuelo.id]}">
+              <form th:action="@{/reservas/crear/{id}(id=${vuelo.id})}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-primary btn-sm"
+                        onclick="return confirm('¿Está seguro que desea reservar este vuelo?');">
+                  <i class="fas fa-ticket-alt me-1"></i>Reservar
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="/" class="btn btn-secondary-custom btn-lg">
+        <i class="fas fa-arrow-left me-2"></i>Nueva Búsqueda
+      </a>
+    </div>
+  </div>
+
+  <!-- Script para auto-cerrar alertas después de 5 segundos -->
+  <script>
+    setTimeout(function() {
+      const alerts = document.querySelectorAll('.alert');
+      alerts.forEach(function(alert) {
+        const alertInstance = new bootstrap.Alert(alert);
+        alertInstance.close();
+      });
+    }, 5000);
+  </script>
+</th:block>
+</body>
+</html>

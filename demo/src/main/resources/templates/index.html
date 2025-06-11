@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base_layout}">
+<head>
+  <title layout:title-pattern="$CONTENT_TITLE"></title>
+  <th:block layout:fragment="scripts_extra">
+    <script>
+      document.querySelector("form").addEventListener("submit", function(e) {
+        const origen = document.getElementById("origen").value;
+        const destino = document.getElementById("destino").value;
+        if (origen === destino) {
+          alert("El origen y el destino no pueden ser la misma ciudad.");
+          e.preventDefault();
+        }
+      });
+    </script>
+  </th:block>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <section class="hero-section">
+    <div class="container text-center">
+      <h1 class="hero-title">Encuentra tu Vuelo Perfecto</h1>
+      <p class="hero-subtitle">Compara precios de cientos de aerolíneas y encuentra las mejores ofertas</p>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="search-form">
+          <form th:action="@{/vuelos/buscar}" method="get">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label for="origen" class="form-label fw-semibold">
+                  <i class="fas fa-plane-departure text-primary me-2"></i>Origen
+                </label>
+                <select class="form-control form-control-custom" id="origen" name="origen" required>
+                  <option value="">Seleccionar ciudad</option>
+                  <option value="CORDOBA">Córdoba (COR)</option>
+                  <option value="MENDOZA">Mendoza (MDZ)</option>
+                  <option value="BARILOCHE">Bariloche (BRC)</option>
+                  <option value="IGUAZU">Iguazú (IGR)</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label for="destino" class="form-label fw-semibold">
+                  <i class="fas fa-plane-arrival text-primary me-2"></i>Destino
+                </label>
+                <select class="form-control form-control-custom" id="destino" name="destino" required>
+                  <option value="">Seleccionar ciudad</option>
+                  <option value="CORDOBA">Córdoba (COR)</option>
+                  <option value="MENDOZA">Mendoza (MDZ)</option>
+                  <option value="BARILOCHE">Bariloche (BRC)</option>
+                  <option value="IGUAZU">Iguazú (IGR)</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label for="fecha" class="form-label fw-semibold">
+                  <i class="fas fa-calendar-alt text-primary me-2"></i>Fecha de Salida
+                </label>
+                <input type="date" class="form-control form-control-custom" id="fecha" name="fecha" required>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-md-6">
+                <label for="pasajeros" class="form-label fw-semibold">
+                  <i class="fas fa-users text-primary me-2"></i>Pasajeros
+                </label>
+                <select class="form-control form-control-custom" id="pasajeros" name="pasajeros">
+                  <option value="1">1 Pasajero</option>
+
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="clase" class="form-label fw-semibold">
+                  <i class="fas fa-chair text-primary me-2"></i>Clase
+                </label>
+                <select class="form-control form-control-custom" id="clase" name="clase">
+                  <option value="economica">Económica</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-primary-custom btn-lg px-5">
+                <i class="fas fa-search me-2"></i>Buscar Vuelos
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-12">
+        <h2 class="text-center mb-5 fw-bold">¿Por qué elegir FlightBooker?</h2>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 text-center p-4">
+          <div class="card-body">
+            <div class="mb-3">
+              <i class="fas fa-dollar-sign fa-3x text-primary"></i>
+            </div>
+            <h5 class="card-title fw-bold">Mejores Precios</h5>
+            <p class="card-text">Comparamos precios de cientos de aerolíneas para garantizarte las mejores ofertas del mercado.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 text-center p-4">
+          <div class="card-body">
+            <div class="mb-3">
+              <i class="fas fa-clock fa-3x text-primary"></i>
+            </div>
+            <h5 class="card-title fw-bold">Reserva Rápida</h5>
+            <p class="card-text">Proceso de reserva simple y rápido. Reserva tu vuelo en menos de 5 minutos.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 text-center p-4">
+          <div class="card-body">
+            <div class="mb-3">
+              <i class="fas fa-headset fa-3x text-primary"></i>
+            </div>
+            <h5 class="card-title fw-bold">Soporte 24/7</h5>
+            <p class="card-text">Nuestro equipo de atención al cliente está disponible las 24 horas para ayudarte.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-12">
+        <h2 class="text-center mb-5 fw-bold">Destinos Populares</h2>
+      </div>
+
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card card-custom overflow-hidden">
+          <div class="card-img-top bg-primary d-flex align-items-center justify-content-center" style="height: 200px;">
+            <i class="fas fa-city fa-4x text-white"></i>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title fw-bold">Buenos Aires</h5>
+            <p class="card-text text-muted">La capital argentina te espera con su rica cultura y gastronomía.</p>
+            <p class="fw-bold text-primary">Desde $15.000</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card card-custom overflow-hidden">
+          <div class="card-img-top bg-success d-flex align-items-center justify-content-center" style="height: 200px;">
+            <i class="fas fa-mountain fa-4x text-white"></i>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title fw-bold">Bariloche</h5>
+            <p class="card-text text-muted">Disfruta de los paisajes más hermosos de la Patagonia.</p>
+            <p class="fw-bold text-primary">Desde $18.000</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card card-custom overflow-hidden">
+          <div class="card-img-top bg-info d-flex align-items-center justify-content-center" style="height: 200px;">
+            <i class="fas fa-water fa-4x text-white"></i>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title fw-bold">Iguazú</h5>
+            <p class="card-text text-muted">Conoce una de las 7 maravillas naturales del mundo.</p>
+            <p class="fw-bold text-primary">Desde $22.000</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card card-custom overflow-hidden">
+          <div class="card-img-top bg-warning d-flex align-items-center justify-content-center" style="height: 200px;">
+            <i class="fas fa-snowflake fa-4x text-white"></i>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title fw-bold">Ushuaia</h5>
+            <p class="card-text text-muted">El fin del mundo te espera con aventuras únicas.</p>
+            <p class="fw-bold text-primary">Desde $25.000</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
+</body>
+</html>

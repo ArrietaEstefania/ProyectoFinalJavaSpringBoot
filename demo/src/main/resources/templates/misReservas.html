@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base_layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Reservas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<th:block layout:fragment="content">
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-list me-2"></i>Mis Reservas
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Mensajes -->
+                    <div th:if="${success}" class="alert alert-success" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span th:text="${success}"></span>
+                    </div>
+
+                    <div th:if="${error}" class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+
+                    <!-- Tabla de reservas -->
+                    <div th:if="${#lists.isEmpty(reservas)}" class="text-center py-5">
+                        <i class="fas fa-ticket-alt fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No tienes reservas aún</h5>
+                        <p class="text-muted">¡Busca vuelos y haz tu primera reserva!</p>
+                        <a href="/vuelos" class="btn btn-primary">
+                            <i class="fas fa-search me-1"></i>Buscar Vuelos
+                        </a>
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(reservas)}">
+                        <table class="table table-hover table-striped table-bordered align-middle">
+                            <thead class="table-dark">
+                            <tr>
+                                <th>Nº Reserva</th>
+                                <th>Aerolínea</th>
+                                <th>Origen</th>
+                                <th>Destino</th>
+                                <th>Fecha</th>
+                                <th>Precio</th>
+                                <th>Estado</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="reserva : ${reservas}">
+                                <td>
+                                    <strong th:text="${reserva.numeroReserva}"></strong>
+                                </td>
+                                <td th:text="${reserva.vueloReservado.aerolinea.nombreAerolinea}"></td>
+                                <td th:text="${reserva.vueloReservado.origen.ciudad.nombre}"></td>
+                                <td th:text="${reserva.vueloReservado.destino.ciudad.nombre}"></td>
+                                <td th:text="${#dates.format(reserva.vueloReservado.fecha.fecha, 'dd/MM/yyyy')}"></td>
+                                <td>
+                                    <span th:if="${#lists.isEmpty(reserva.vueloReservado.tarifas)}">N/A</span>
+                                    <span th:unless="${#lists.isEmpty(reserva.vueloReservado.tarifas)}"
+                                          th:text="${'$' + #numbers.formatDecimal(reserva.vueloReservado.tarifas.get(0).precioTarifa, 0, 'COMMA', 2, 'POINT')}"></span>
+                                </td>
+                                <td>
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check me-1"></i>Confirmada
+                                            </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</th:block>
+</body>
+
+</html>
